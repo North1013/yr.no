@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import requests
 import xml.etree.cElementTree as ET
+import requests
 
 def get_url(url, filename):
     """Dl the xml file from yr.no"""
@@ -12,16 +12,23 @@ def get_url(url, filename):
 
 def xml_parse(filename):
     """Parse the downloaded xml"""
-    e = ET.parse(filename).getroot()
-    for atype in e.findall('location'):
-        print(atype.get('name'))
-
+    root = ET.parse(filename).getroot()
+    print(root.tag)
+    for foo in root.findall('location'):
+        country = foo.find('country').text
+        name = foo.find('name').text
+        print('Country: ', country)
+        print('City: ', name)
+    for qwe in root.findall('forecast/tabular/time'):
+        attributes = qwe.attrib
+        asd = attributes.get('from')
+        print(asd)
 
 def main(url, filename):
-    get_url(url, filename)
+    # get_url(url, filename)
     xml_parse(filename)
 
 FILENAME = "yr.xml"
-URL = input("Input url to your yr.no location")
+URL = "Input url to yr.no forecast xml:\n"
 
 main(URL, FILENAME)
